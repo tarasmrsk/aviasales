@@ -1,0 +1,27 @@
+.card{
+    height: 40px;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.card_info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.card_flight, .card_status, .card_change{
+    display:grid;
+}
+
+.flight, .status, .change{
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.5px;
+    color: #A0B0B9
+}
+
+.flight_time, .status_time, .change_place{
+    font-size: 14px;
+    line-height: 21px;
+    color: #4A4A4A;
+}
