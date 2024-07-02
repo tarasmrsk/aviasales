@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Filters from '../Filters'
-import Navigation from '../Navigation'
+import Sort from '../Sort'
 import TicketList from '../TicketList'
 
 import classes from './App.module.scss'
@@ -18,7 +18,7 @@ function App() {
         <div className={classes.main}>
           <Filters />
           <div>
-            <Navigation />
+            <Sort />
             <TicketList />
           </div>
         </div>

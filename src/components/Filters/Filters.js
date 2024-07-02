@@ -1,32 +1,35 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { setFilters } from '../../redux/filtersReducer'
 
 import classes from './Filters.module.scss'
 
 function Filters() {
-  const [stops, setStops] = useState({
-    all: false,
-    withoutStops: false,
-    oneStop: false,
-    twoStops: false,
-    threeStops: false
-  })
+  const dispatch = useDispatch()
+  const filters = useSelector(state => state.filter)
 
-  const handleCheckboxChange = (stop) => {
-    if (stop === 'all') {
-      const allValue = !stops.all
-      setStops({
-        all: allValue,
-        withoutStops: allValue,
-        oneStop: allValue,
-        twoStops: allValue,
-        threeStops: allValue
-      })
+  const handleFilterChange = (filter) => {
+    let updatedFilters
+    if (filter === 'all') {
+      const allChecked = !filters.all
+      updatedFilters = {
+        ...filters,
+        all: allChecked,
+        noneStop: allChecked,
+        oneStop: allChecked,
+        twoStops: allChecked,
+        threeStops: allChecked,
+      }
     } else {
-      setStops({
-        ...stops,
-        [stop]: !stops[stop]
-      })
+      updatedFilters = { ...filters, [filter]: !filters[filter] }
+      if (updatedFilters.noneStop && updatedFilters.oneStop && updatedFilters.twoStops && updatedFilters.threeStops) {
+        updatedFilters.all = true
+      } else {
+        updatedFilters.all = false
+      }
     }
+    dispatch(setFilters(updatedFilters))
   }
 
   return (
@@ -36,9 +39,8 @@ function Filters() {
         <input
           className={classes.checkbox}
           type="checkbox"
-          id="all"
-          checked={stops.all}
-          onChange={() => handleCheckboxChange('all')}
+          checked={filters.all}
+          onChange={() => handleFilterChange('all')}
         />
         <span>Все</span>
       </li>
@@ -46,9 +48,8 @@ function Filters() {
         <input
           className={classes.checkbox}
           type="checkbox"
-          id="withoutStops"
-          checked={stops.withoutStops}
-          onChange={() => handleCheckboxChange('withoutStops')}
+          checked={filters.noneStop}
+          onChange={() => handleFilterChange('noneStop')}
         />
         <span>Без пересадок</span>
       </li>
@@ -56,9 +57,8 @@ function Filters() {
         <input
           className={classes.checkbox}
           type="checkbox"
-          id="oneStop"
-          checked={stops.oneStop}
-          onChange={() => handleCheckboxChange('oneStop')}
+          checked={filters.oneStop}
+          onChange={() => handleFilterChange('oneStop')}
         />
         <span>1 пересадка</span>
       </li>
@@ -66,9 +66,8 @@ function Filters() {
         <input
           className={classes.checkbox}
           type="checkbox"
-          id="twoStops"
-          checked={stops.twoStops}
-          onChange={() => handleCheckboxChange('twoStops')}
+          checked={filters.twoStops}
+          onChange={() => handleFilterChange('twoStops')}
         />
         <span>2 пересадки</span>
       </li>
@@ -76,9 +75,8 @@ function Filters() {
         <input
           className={classes.checkbox}
           type="checkbox"
-          id="threeStops"
-          checked={stops.threeStops}
-          onChange={() => handleCheckboxChange('threeStops')}
+          checked={filters.threeStops}
+          onChange={() => handleFilterChange('threeStops')}
         />
         <span>3 пересадки</span>
       </li>

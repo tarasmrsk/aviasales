@@ -1,4 +1,4 @@
-.nav{
+.sort{
 	display: flex;
   	justify-content: space-between;
 	text-transform: uppercase;
@@ -11,17 +11,17 @@
   	border: 1px solid #DFE5EC;
 }
 
-.nav_item{
+.sort_item{
 	height: 50px;
 	flex: 1;
 }
 
-.nav_item_center{
+.sort_item_center{
 	border-left: 1px solid #DFE5EC;
   	border-right: 1px solid #DFE5EC;
 }
 
-.nav_button{
+.sort_button{
 	display: block;
 	width: 100%;
 	height: 100%;
