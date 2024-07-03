@@ -8,7 +8,7 @@ import { ticketsReducer } from './ticketsReducer'
 const rootReducer = combineReducers({
   sort: sortReducer,
   filter: filtersReducer,
-  tickets: ticketsReducer
+  id: ticketsReducer,
 })
 
 const store = createStore(rootReducer, compose(
