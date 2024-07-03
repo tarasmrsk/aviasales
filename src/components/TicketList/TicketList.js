@@ -10,10 +10,6 @@ function TicketList() {
     <section>
       <div>
         <Ticket />
-        <Ticket />
-        <Ticket />
-        <Ticket />
-        <Ticket />
       </div>
       <footer className={classes.show_more}>
         <button type="button" className={classes.show_button}>
@@ -25,3 +21,4 @@ function TicketList() {
 }
 
 export default TicketList
+
