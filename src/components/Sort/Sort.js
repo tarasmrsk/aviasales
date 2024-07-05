@@ -8,14 +8,14 @@ import classes from './Sort.module.scss'
 function Sort() {
 
   const dispatch = useDispatch()
-  const ticket = useSelector(state => state.sort.ticket)
+  const sortButton = useSelector(state => state.sort.sortButton)
 
   return (
     <ul className={classes.sort}>
       <li className={classes.sort_item}>
         <button
           type="button"
-          className={`${classes.sort_button} ${ticket === 'CHEAPEST' ? classes.active : ''}`}
+          className={`${classes.sort_button} ${sortButton === 'CHEAPEST' ? classes.active : ''}`}
           onClick={() => dispatch(setCheapestValue())}
         >
           Самый дешевый
@@ -24,7 +24,7 @@ function Sort() {
       <li className={classes.sort_item}>
         <button
           type="button"
-          className={`${classes.sort_button} ${classes.fastest} ${ticket === 'FASTED' ? classes.active : ''}`}
+          className={`${classes.sort_button} ${classes.fastest} ${sortButton === 'FASTEST' ? classes.active : ''}`}
           onClick={() => dispatch(setFastestValue())}
         >
           Самый быстрый
@@ -33,7 +33,7 @@ function Sort() {
       <li className={classes.sort_item}>
         <button
           type="button"
-          className={`${classes.sort_button} ${ticket === 'OPTIMAL' ? classes.active : ''}`}
+          className={`${classes.sort_button} ${sortButton === 'OPTIMAL' ? classes.active : ''}`}
           onClick={() => dispatch(setOptimalValue())}
         >
           Оптимальный

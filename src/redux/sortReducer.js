@@ -1,6 +1,6 @@
 const SORTED_BUTTON = {
   CHEAPEST: 'CHEAPEST',
-  FASTED: 'FASTED',
+  FASTED: 'FASTEST',
   OPTIMAL: 'OPTIMAL',
 }
 
@@ -9,7 +9,7 @@ export const setCheapestValue = () => ({
 })
 
 export const setFastestValue = () => ({
-  type: 'FASTED'
+  type: 'FASTEST'
 })
 
 export const setOptimalValue = () => ({
@@ -17,7 +17,7 @@ export const setOptimalValue = () => ({
 })
 
 const initialState = {
-  ticket: SORTED_BUTTON.CHEAPEST
+  sortButton: SORTED_BUTTON.CHEAPEST
 
 }
 
@@ -25,11 +25,11 @@ const initialState = {
 export const sortReducer = (state = initialState, action) => {
   switch (action.type) {
   case 'CHEAPEST':
-    return { ticket: SORTED_BUTTON.CHEAPEST }
-  case 'FASTED':
-    return { ticket: SORTED_BUTTON.FASTED }
+    return { sortButton: SORTED_BUTTON.CHEAPEST }
+  case 'FASTEST':
+    return { sortButton: SORTED_BUTTON.FASTED }
   case 'OPTIMAL':
-    return { ticket: SORTED_BUTTON.OPTIMAL }
+    return { sortButton: SORTED_BUTTON.OPTIMAL }
   default:
     return state
   }

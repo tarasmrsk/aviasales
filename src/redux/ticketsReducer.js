@@ -1,10 +1,11 @@
 const initialState = {
   searchId: null,
   tickets: [],
+  sortTickets: [],
   loading: false,
   error: null,
 }
-  
+    
 // eslint-disable-next-line import/prefer-default-export, default-param-last
 export const ticketsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -31,11 +32,16 @@ export const ticketsReducer = (state = initialState, action) => {
       loading: false,
       error: action.payload.error,
     }
+  case 'SET_SORT_TICKETS':
+    return {
+      ...state,
+      sortTickets: action.payload.sortTickets,
+    }
   default:
     return state
   }
 }
-  
+    
 export const fetchSearchId = () => async (dispatch) => {
   try {
     const response = await fetch('https://aviasales-test-api.kata.academy/search')
@@ -48,7 +54,7 @@ export const fetchSearchId = () => async (dispatch) => {
     console.error('Error fetching searchId:', error)
   }
 }
-  
+    
 export const fetchTickets = (searchId) => async (dispatch) => {
   dispatch({ type: 'FETCH_TICKETS_REQUEST' })
   try {
@@ -64,3 +70,8 @@ export const fetchTickets = (searchId) => async (dispatch) => {
     dispatch({ type: 'FETCH_TICKETS_FAILURE', payload: { error: error.message } })
   }
 }
+
+export const setSortTickets = (sortTickets) => ({
+  type: 'SET_SORT_TICKETS',
+  payload: { sortTickets },
+})
