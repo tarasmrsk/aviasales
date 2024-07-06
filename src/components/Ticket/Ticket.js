@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchSearchId, fetchTickets, setSortTickets} from '../../redux/ticketsReducer'
+import { showMoreTickets } from '../../redux/moreticketReducer'
 
 import classes from './Ticket.module.scss'
 
@@ -11,11 +12,26 @@ function Ticket() {
   const tickets = useSelector(state => state.id.tickets)
   const sortTickets = useSelector(state => state.id.sortTickets)
   const sortButton = useSelector(state => state.sort.sortButton)
+  const filterAll = useSelector(state => state.filter.all)
+  const filterNone = useSelector(state => state.filter.noneStop)
+  const filterOne = useSelector(state => state.filter.oneStop)
+  const filterTwo = useSelector(state => state.filter.twoStops)
+  const filterThree = useSelector(state => state.filter.threeStops)
+  const displayedTicketsCount = useSelector(state => state.more.displayedTicketsCount)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     if (tickets.length > 0) {
-      const sortedTickets = tickets.slice().sort((a, b) => {
+      const filteredTickets = tickets.filter(ticket => {
+        if (filterAll) return true
+        if (filterNone && ticket.segments[0].stops.length === 0 && ticket.segments[1].stops.length === 0) return true
+        if (filterOne && ticket.segments[0].stops.length === 1 && ticket.segments[1].stops.length === 1) return true
+        if (filterTwo && ticket.segments[0].stops.length === 2 && ticket.segments[1].stops.length === 2) return true
+        if (filterThree && ticket.segments[0].stops.length === 3 && ticket.segments[1].stops.length === 3) return true
+        return false
+      })
+
+      const sortedTickets = filteredTickets.slice().sort((a, b) => {
         if (sortButton === 'CHEAPEST') {
           return a.price - b.price
         } if (sortButton === 'FASTEST') {
@@ -36,9 +52,9 @@ function Ticket() {
         return 0
       })
   
-      dispatch(setSortTickets(sortedTickets.slice(0, 5)))
+      dispatch(setSortTickets(sortedTickets.slice(0, displayedTicketsCount)))
     }
-  }, [tickets, sortButton])
+  }, [tickets, sortButton, displayedTicketsCount, filterAll, filterNone, filterOne, filterTwo, filterThree])
 
   useEffect(() => {
     dispatch(fetchSearchId())
@@ -65,6 +81,10 @@ function Ticket() {
     const hours = Math.floor(duration / 60)
     const minutes = duration % 60
     return `${hours}ч ${minutes}м`
+  }
+
+  const handleShowMoreTickets = () => {
+    dispatch(showMoreTickets())
   }
 
   return (
@@ -112,6 +132,11 @@ function Ticket() {
           <p>Загрузка билетов...</p>
         )
       )}
+      <footer className={classes.show_more}>
+        <button type="button" className={classes.show_button} onClick={handleShowMoreTickets}>
+          Показать еще 5 билетов
+        </button>
+      </footer>
     </div>
   )
 }

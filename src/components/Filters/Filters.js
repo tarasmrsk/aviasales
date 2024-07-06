@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { setFilters } from '../../redux/filtersReducer'
+import { setAllValue, setNoneValue, setOneValue, setTwoValue, setThreeValue } from '../../redux/filtersReducer'
 
 import classes from './Filters.module.scss'
 
@@ -29,8 +29,13 @@ function Filters() {
         updatedFilters.all = false
       }
     }
-    dispatch(setFilters(updatedFilters))
+    dispatch(setAllValue(updatedFilters))
+    dispatch(setNoneValue(updatedFilters))
+    dispatch(setOneValue(updatedFilters))
+    dispatch(setTwoValue(updatedFilters))
+    dispatch(setThreeValue(updatedFilters))
   }
+
 
   return (
     <ul className={classes.transfer}>
