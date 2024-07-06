@@ -132,11 +132,16 @@ function Ticket() {
           <p>Загрузка билетов...</p>
         )
       )}
-      <footer className={classes.show_more}>
-        <button type="button" className={classes.show_button} onClick={handleShowMoreTickets}>
-          Показать еще 5 билетов
-        </button>
-      </footer>
+      {!filterAll && !filterNone && !filterOne && !filterTwo && !filterThree && (
+        <p>Рейсов, подходящих под заданные фильтры, не найдено</p>
+      )}
+      {(filterAll || filterNone || filterOne || filterTwo || filterThree) && (
+        <footer className={classes.show_more}>
+          <button type="button" className={classes.show_button} onClick={handleShowMoreTickets}>
+            Показать еще 5 билетов
+          </button>
+        </footer>
+      )}
     </div>
   )
 }
