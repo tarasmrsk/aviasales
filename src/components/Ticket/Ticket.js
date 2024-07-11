@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Spin } from 'antd'
 
 import { fetchSearchId, fetchTickets, setSortTickets} from '../../redux/ticketsReducer'
 import { showMoreTickets } from '../../redux/moreticketReducer'
@@ -10,6 +11,7 @@ function Ticket() {
   const dispatch = useDispatch()
   const searchId = useSelector(state => state.id.searchId)
   const tickets = useSelector(state => state.id.tickets)
+  const loading = useSelector(state => state.id.loading)
   const sortTickets = useSelector(state => state.id.sortTickets)
   const sortButton = useSelector(state => state.sort.sortButton)
   const filterAll = useSelector(state => state.filter.all)
@@ -89,49 +91,49 @@ function Ticket() {
 
   return (
     <div>
-      {error ? (
-        <p>Произошла ошибка: {error}</p>
-      ) : (
-        Array.isArray(tickets) && tickets.length > 0 ? (
-          sortTickets.map(ticket => (
-            <section key={ticket.id} className={classes.ticket}>
-              <div className={classes.ticket_item}>
-                <div className={classes.ticket_header}>
-                  <div className={classes.ticket_price}>
-                    {ticket.price} Р
-                  </div>
-                  <div className={classes.ticket_logo}>
-                    <img src={`https://pics.avs.io/137/50/${ticket.carrier}.png`}  alt={ticket.carrier} />
-                  </div>
+      {!loading && (
+        <div className={classes.spinner}>
+          <Spin tip="Loading" size="large" />
+        </div>
+      )}
+      {error && <p>Произошла ошибка: {error}</p>}
+      {
+        sortTickets.map(ticket => (
+          <section key={ticket.id} className={classes.ticket}>
+            <div className={classes.ticket_item}>
+              <div className={classes.ticket_header}>
+                <div className={classes.ticket_price}>
+                  {ticket.price} Р
+                </div>
+                <div className={classes.ticket_logo}>
+                  <img src={`https://pics.avs.io/137/50/${ticket.carrier}.png`}  alt={ticket.carrier} />
                 </div>
               </div>
-              <div className={classes.card}>
-                {ticket.segments.map((segment, idx) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <div key={idx} className={classes.card_info}>
-                    <div className={classes.card_flight}>
-                      <span className={classes.flight}>{segment.origin} - {segment.destination} </span>
-                      <span className={classes.flight_time}>
-                        {formatTime(segment.date)} – {formatTime(new Date(new Date(segment.date).getTime() + segment.duration * 60000))}
-                      </span>
-                    </div>
-                    <div className={classes.card_status}>
-                      <span className={classes.status}>В пути</span>
-                      <span className={classes.status_time}>{formatDuration(segment.duration)}</span>
-                    </div>
-                    <div className={classes.card_change}>
-                      <span className={classes.change}>{segment.stops.length === 0 ? 'Прямой рейс' : segment.stops.length === 1 ? '1 пересадка' : `${segment.stops.length} пересадки`}</span>
-                      <span className={classes.change_place}>{segment.stops.join(', ')}</span>
-                    </div>
+            </div>
+            <div className={classes.card}>
+              {ticket.segments.map((segment, idx) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={idx} className={classes.card_info}>
+                  <div className={classes.card_flight}>
+                    <span className={classes.flight}>{segment.origin} - {segment.destination}</span>
+                    <span className={classes.flight_time}>
+                      {formatTime(segment.date)} – {formatTime(new Date(new Date(segment.date).getTime() + segment.duration * 60000))}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </section>
-          ))
-        ) : (
-          <p>Загрузка билетов...</p>
-        )
-      )}
+                  <div className={classes.card_status}>
+                    <span className={classes.status}>В пути</span>
+                    <span className={classes.status_time}>{formatDuration(segment.duration)}</span>
+                  </div>
+                  <div className={classes.card_change}>
+                    <span className={classes.change}>{segment.stops.length === 0 ? 'Прямой рейс' : segment.stops.length === 1 ? '1 пересадка' : `${segment.stops.length} пересадки`}</span>
+                    <span className={classes.change_place}>{segment.stops.join(', ')}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))
+      }
       {!filterAll && !filterNone && !filterOne && !filterTwo && !filterThree && (
         <p>Рейсов, подходящих под заданные фильтры, не найдено</p>
       )}

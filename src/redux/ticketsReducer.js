@@ -17,14 +17,12 @@ export const ticketsReducer = (state = initialState, action) => {
   case 'FETCH_TICKETS_REQUEST':
     return {
       ...state,
-      loading: true,
       error: null,
     }
   case 'FETCH_TICKETS_SUCCESS':
     return {
       ...state,
       tickets: [...state.tickets, ...action.payload.tickets],
-      loading: false,
     }
   case 'FETCH_TICKETS_FAILURE':
     return {
@@ -36,6 +34,12 @@ export const ticketsReducer = (state = initialState, action) => {
     return {
       ...state,
       sortTickets: action.payload.sortTickets,
+    }
+  case 'LOADING_TRUE':
+    return {
+      ...state,
+      loading: true,
+      error: null,
     }
   default:
     return state
@@ -58,16 +62,31 @@ export const fetchSearchId = () => async (dispatch) => {
 export const fetchTickets = (searchId) => async (dispatch) => {
   dispatch({ type: 'FETCH_TICKETS_REQUEST' })
   try {
-    const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
-    if (!response.ok) {
-      throw new Error('Failed to fetch tickets')
+    let stopFlag = false
+    
+    while (!stopFlag) {
+      // eslint-disable-next-line no-await-in-loop
+      const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch tickets')
+      }
+      // eslint-disable-next-line no-await-in-loop
+      const data = await response.json()
+      
+      if (data.stop) {
+        stopFlag = true
+        dispatch({ type: 'LOADING_TRUE' })
+      }
+
+      if (data) {
+        dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: { tickets: data.tickets } })
+      }
     }
-    const data = await response.json()
-    if (data) {
-      dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: { tickets: data.tickets } })
-    } 
   } catch (error) {
     dispatch({ type: 'FETCH_TICKETS_FAILURE', payload: { error: error.message } })
+    setTimeout(() => {
+      dispatch(fetchTickets(searchId))
+    }, 1000)
   }
 }
 
