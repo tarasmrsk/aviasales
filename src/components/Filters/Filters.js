@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -36,54 +37,64 @@ function Filters() {
     dispatch(setThreeValue(updatedFilters))
   }
 
-
   return (
     <ul className={classes.transfer}>
       <h3 className={classes.transfer_number}>Количество пересадок</h3>
       <li className={classes.transfer_item}>
-        <input
-          className={classes.checkbox}
-          type="checkbox"
-          checked={filters.all}
-          onChange={() => handleFilterChange('all')}
-        />
-        <span>Все</span>
+        <label>
+          <input
+            id="all"
+            className={classes.checkbox}
+            type="checkbox"
+            checked={filters.all}
+            onChange={() => handleFilterChange('all')}
+          />
+          Все
+        </label>
       </li>
       <li className={classes.transfer_item}>
-        <input
-          className={classes.checkbox}
-          type="checkbox"
-          checked={filters.noneStop}
-          onChange={() => handleFilterChange('noneStop')}
-        />
-        <span>Без пересадок</span>
+        <label>
+          <input
+            className={classes.checkbox}
+            type="checkbox"
+            checked={filters.noneStop}
+            onChange={() => handleFilterChange('noneStop')}
+          />
+          Без пересадок
+        </label>
       </li>
       <li className={classes.transfer_item}>
-        <input
-          className={classes.checkbox}
-          type="checkbox"
-          checked={filters.oneStop}
-          onChange={() => handleFilterChange('oneStop')}
-        />
-        <span>1 пересадка</span>
+        <label>
+          <input
+            className={classes.checkbox}
+            type="checkbox"
+            checked={filters.oneStop}
+            onChange={() => handleFilterChange('oneStop')}
+          />
+          1 пересадка
+        </label>
       </li>
       <li className={classes.transfer_item}>
-        <input
-          className={classes.checkbox}
-          type="checkbox"
-          checked={filters.twoStops}
-          onChange={() => handleFilterChange('twoStops')}
-        />
-        <span>2 пересадки</span>
+        <label>
+          <input
+            className={classes.checkbox}
+            type="checkbox"
+            checked={filters.twoStops}
+            onChange={() => handleFilterChange('twoStops')}
+          />
+          2 пересадки
+        </label>
       </li>
       <li className={classes.transfer_item}>
-        <input
-          className={classes.checkbox}
-          type="checkbox"
-          checked={filters.threeStops}
-          onChange={() => handleFilterChange('threeStops')}
-        />
-        <span>3 пересадки</span>
+        <label>
+          <input
+            className={classes.checkbox}
+            type="checkbox"
+            checked={filters.threeStops}
+            onChange={() => handleFilterChange('threeStops')}
+          />
+          3 пересадки
+        </label>
       </li>
     </ul>
   )

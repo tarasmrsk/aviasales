@@ -1,7 +1,6 @@
 const initialState = {
   searchId: null,
   tickets: [],
-  sortTickets: [],
   loading: false,
   error: null,
 }
@@ -63,23 +62,33 @@ export const fetchTickets = (searchId) => async (dispatch) => {
   dispatch({ type: 'FETCH_TICKETS_REQUEST' })
   try {
     let stopFlag = false
-    
-    while (!stopFlag) {
-      // eslint-disable-next-line no-await-in-loop
-      const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
-      if (!response.ok) {
-        throw new Error('Failed to fetch tickets')
-      }
-      // eslint-disable-next-line no-await-in-loop
-      const data = await response.json()
-      
-      if (data.stop) {
-        stopFlag = true
-        dispatch({ type: 'LOADING_TRUE' })
-      }
 
-      if (data) {
-        dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: { tickets: data.tickets } })
+    while (!stopFlag) {
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`)
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch tickets')
+        }
+
+        // eslint-disable-next-line no-await-in-loop
+        const data = await response.json()
+
+        if (data.stop) {
+          stopFlag = true
+          dispatch({ type: 'LOADING_TRUE' })
+        }
+
+        if (data) {
+          dispatch({ type: 'FETCH_TICKETS_SUCCESS', payload: { tickets: data.tickets } })
+        }
+      } catch (error) {
+        console.error('Error fetching tickets:', error)
+      }
+      while (!navigator.onLine) {
+        // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
+        await new Promise(resolve => setTimeout(resolve, 1000))
       }
     }
   } catch (error) {
@@ -89,8 +98,3 @@ export const fetchTickets = (searchId) => async (dispatch) => {
     }, 1000)
   }
 }
-
-export const setSortTickets = (sortTickets) => ({
-  type: 'SET_SORT_TICKETS',
-  payload: { sortTickets },
-})
